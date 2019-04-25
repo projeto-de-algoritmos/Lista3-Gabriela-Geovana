@@ -1,6 +1,18 @@
 from os import system
 from shift import Shift
 
+def removeOverlaps(removed, shifts):
+    for s in shifts:
+        if removed in s.overlaps:
+            s.overlaps.remove(removed)
+
+def isAllSupervised(shifts):
+
+    for s in shifts:
+        if not s.isSupervised:
+            return False
+
+    return True 
 
 def defineOverlaps(shifts):
 
@@ -40,11 +52,12 @@ def calculateCommittee(shifts):
     overlapsSorted = sorted(possibleCommittee, key=lambda x: len(x.overlaps))
     solution = [] 
 
-    # while not allSupervised(overlapsSorted):
-    #     solution.append(overlapsSorted[0])
-    #     del overlapsSorted[0]
+    while not isAllSupervised(shifts) and overlapsSorted:
+        solution.append(overlapsSorted[0])
+        removeOverlaps(overlapsSorted[0], shifts)
+        del overlapsSorted[0]
 
-    return overlapsSorted
+    return solution
 
 while (True):
     
@@ -79,8 +92,9 @@ while (True):
         s.printShift()
 
     solution = calculateCommittee(shifts)
-    
-    # TODO mostrar número de estudantes no comitê
+    print("\n Estudantes no comitê:\n")
+    for s in solution:
+        print(s.id)
 
     end = input("Deseja continuar?\n\n\t1) Não\n\t2) Sim\n\n")
     
