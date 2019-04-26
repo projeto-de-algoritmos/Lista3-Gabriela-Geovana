@@ -1,5 +1,6 @@
 from os import system
 from shift import Shift
+from random import randrange
 
 def removeOverlaps(removed, shifts):
     for s in shifts:
@@ -66,26 +67,40 @@ while (True):
     shifts = []
 
     if option == '1':
-        # TODO montar shifts
-        students = 6
+        for i in range(1, students):
+            start = randrange(0, 23)
+            end = start + randrange(start + 1, 24)
+            shifts.append(Shift(i, start, end))
         
-        shifts.append(Shift(1, 3, 10))
-        shifts.append(Shift(2, 14, 18))
-        shifts.append(Shift(3, 10, 12))
-        shifts.append(Shift(4, 2, 5))
-        shifts.append(Shift(5, 16, 20))
-        shifts.append(Shift(6, 11, 15))
+        ##students = 6
+        
+        ##shifts.append(Shift(1, 3, 10))
+        ##shifts.append(Shift(2, 14, 18))
+        ##shifts.append(Shift(3, 10, 12))
+        ##shifts.append(Shift(4, 2, 5))
+        ##shifts.append(Shift(5, 16, 20))
+        ## shifts.append(Shift(6, 11, 15))
 
     elif option == '2':
-        # TODO montar shifts
+        
+        for i in range(1, students):
+            while(1):
+                start = int(input("Insira o tempo inicial do estudante {}:".format(i)))
+
+                end = int(input("Insira o tempo final do estudante {} :".format(i)))
+
+                if((start < 0 or start > 23) or (end < 1 or end > 24)):
+                    print("Digite valores entre 0 e 23 para o início e 1 e 24 para o final")
+                else:
+                    break
+
+            shifts.append(Shift(i, start, end))
         pass
     else:
         print("Opção inválida")
         break
 
     system('clear')
-
-
     
     print("Turnos:\n")
     for s in shifts:
