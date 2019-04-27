@@ -14,5 +14,7 @@ class Shift(object):
             print("   ", end='') # this space is equivalent to one hour
         for i in range(self.duration):
             print("---", end='') # this space is equivalent to one hour
-
         print(" ")
+    
+    def __repr__(self):
+        return str(self.id)
