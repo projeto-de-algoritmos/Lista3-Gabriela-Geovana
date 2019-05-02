@@ -6,15 +6,18 @@ class Shift(object):
         self.end = end
         self.duration = end - start
         self.overlaps = []
-        self.isSupervised = False
 
     def printShift(self):
-        print(self.id, end='')
+        
         for i in range(self.start):
             print("   ", end='') # this space is equivalent to one hour
         for i in range(self.duration):
             print("---", end='') # this space is equivalent to one hour
-        print(" ")
+        
+        for i in range(self.end, 24):
+            print("   ", end='')
+        
+        print(self.id)
     
     def __repr__(self):
-        return str(self.id)
+        return str(self.id) 
