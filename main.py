@@ -11,6 +11,11 @@ def defineOverlaps(shifts):
             elif c != s and c.start < s.end and c.end > s.end:
                 # c ends after s and overlaps
                 s.overlaps.append(c)
+            elif c != s and c.start == s.start and c.end == s.end:
+                s.overlaps.append(c)
+    
+    for s in shifts:
+        print(s, s.overlaps)
 
 def removeConflicts(shifts, added):   
     for s in shifts:
@@ -29,17 +34,17 @@ def removeConflicts(shifts, added):
 def calculateCommittee(shifts):
     committee = []  
     defineOverlaps(shifts)
-    # sorting by overlaps
-    overlapsSorted = sorted(shifts, key=lambda x: (-len(x.overlaps), x.start))
-    print("Turnos ordenados por conflitos:\n")
-    for s in overlapsSorted:
+    shifts = sorted(shifts, key=lambda x: x.end)
+    print("Turnos ordenados por término:\n")
+    for s in shifts:
         s.printShift()
 
     while(len(shifts)):
-        added = overlapsSorted[0]  
+        overlaps = sorted(shifts[0].overlaps, key=lambda x: x.end)
+        added = overlaps[-1]  
         committee.append(added)
         shifts = removeConflicts(shifts, added)
-        overlapsSorted = sorted(shifts, key=lambda x: (-len(x.overlaps), x.start))    
+        shifts = sorted(shifts, key=lambda x: x.end)    
     return committee
 
 def readStudents(students):
@@ -71,6 +76,8 @@ def isOverlaping(start, end, shifts):
         elif c.start < end and c.end > end:
             # c ends after s and overlaps
             return True
+        elif c.start == start and c.end == end:
+            return True 
 
     return False
 
