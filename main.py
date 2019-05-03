@@ -5,29 +5,22 @@ from random import randrange
 def defineOverlaps(shifts):
     for s in shifts:
         for c in shifts:            
-            if c != s and c.end > s.start and c.start < s.start: 
+            if (c != s and not(c.start < s.start and c.end <= s.start) and not(c.start >= s.end)):
                 # c ends before s and overlaps
-                s.overlaps.append(c)
-            elif c != s and c.start < s.end and c.end > s.end:
-                # c ends after s and overlaps
-                s.overlaps.append(c)
-            elif c != s and c.start == s.start and c.end == s.end:
                 s.overlaps.append(c)
     
     for s in shifts:
         print(s, s.overlaps)
 
-def removeConflicts(shifts, added):   
+def removeConflicts(shifts, added):
     for s in shifts:
         if added != s:
             if added not in s.overlaps:
                 for c in s.overlaps:
                     if c in added.overlaps:
                         s.overlaps = list(filter(lambda x: x != c, s.overlaps))
-                        break
             else:
-                shifts = list(filter(lambda x: x != s, shifts))
-        
+                shifts = list(filter(lambda x: x != s, shifts))    
     shifts = list(filter(lambda x: x != added, shifts))
     return shifts
 
@@ -41,10 +34,13 @@ def calculateCommittee(shifts):
 
     while(len(shifts)):
         overlaps = sorted(shifts[0].overlaps, key=lambda x: x.end)
-        added = overlaps[-1]  
+        if (len(overlaps)):
+            added = overlaps[-1]  
+        else:
+            added = shifts[0]
         committee.append(added)
         shifts = removeConflicts(shifts, added)
-        shifts = sorted(shifts, key=lambda x: x.end)    
+        shifts = sorted(shifts, key=lambda x: x.end)  
     return committee
 
 def readStudents(students):
